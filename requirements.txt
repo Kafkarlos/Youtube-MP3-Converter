@@ -1,0 +1,2 @@
+InquirerPy==0.3.4
+yt_dlp==2026.3.17
