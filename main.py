@@ -37,9 +37,7 @@ def show_info(url):
     with yt_dlp.YoutubeDL(opts) as ydl:
         info = ydl.extract_info(url, download=False)
 
-        print(f"Título: {info.get('title')}")
-        print(f"Canal: {info.get('channel')}")
-        
+        print(f"{info.get('channel')} - {info.get('title')}")
         duration = info.get('duration')
         if duration:
             print(f"Duração: {get_duration(info.get('duration'))}")
@@ -55,6 +53,8 @@ def main():
         type=int
     )
 
+    parser.add_argument('--yes', action='store_true')
+    
     args = parser.parse_args()
     
     url = inquirer.text(
@@ -63,18 +63,20 @@ def main():
 
     show_info(url)
 
-    confirm = input("Prosseguir com o Download? [S/n]:").lower()
-    
-    if not confirm or confirm == "s":
-        quality = inquirer.select(
-            message="Escolha a qualidade (Kbps)",
-            choices= [128,192,320],
-            vi_mode=True
-        ).execute() if not args.quality else args.quality
+    if not args.yes:
+        confirm = input("Prosseguir com o Download? [S/n]:").lower()
+        if not confirm or confirm == "s":
+            pass
+        else:
+            return
+        
+    quality = inquirer.select(
+        message="Escolha a qualidade (Kbps)",
+        choices= [128,192,320],
+        vi_mode=True
+    ).execute() if not args.quality else args.quality
 
-        download(url, quality)
-    else:
-        return
+    download(url, quality)
 
 if __name__ == '__main__':
     main()
