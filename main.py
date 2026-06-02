@@ -1,3 +1,4 @@
+from pathlib import Path
 import argparse
 
 import yt_dlp
@@ -13,6 +14,7 @@ def download(url, quality):
             'preferredcodec': 'mp3',
             'preferredquality': quality,
         }],
+        'outtmpl': '%(title)s.%(ext)s'
     }
     print("Fazendo Download...")
 
