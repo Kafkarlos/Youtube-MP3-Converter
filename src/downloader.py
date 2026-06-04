@@ -1,6 +1,33 @@
+import time 
 from pathlib import Path
+from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn, TimeRemainingColumn, MofNCompleteColumn, DownloadColumn
 
 import yt_dlp
+
+progress = Progress(
+    TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+    BarColumn(),
+    DownloadColumn()
+)
+task = None
+
+def progress_hook(d):
+    global task
+
+    if d['status'] == "downloading":
+        total = d.get('total_bytes',0) or d.get('total_bytes_estimate', 0)
+        elapsed = d.get('downloaded_bytes',0)
+        
+        if task is None:
+            task = progress.add_task("Baixando",total=total)
+
+        progress.update(
+            task,
+            completed=elapsed,
+        )
+
+    elif d['status'] == "finished":
+        progress.update(task, completed=progress.tasks[0].total)
 
 def download(url, quality):
     outdir = Path.home()/"Downloads"
@@ -8,19 +35,21 @@ def download(url, quality):
     opts = {
         'quiet': True,
         'no_warnings': True,
+        'noprogress': True,
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': quality,
         }],
+        'progress_hooks': [progress_hook],
         'outtmpl': f'{outdir}/%(title)s.%(ext)s'
     }
 
-    print("Fazendo download...")
-
-    with yt_dlp.YoutubeDL(opts) as ydl:
-        ydl.download([url])
+    print("Iniciando Download...")
+    with progress:
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            ydl.download([url])
 
     print("Download Concluído!")
 
