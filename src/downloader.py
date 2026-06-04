@@ -1,8 +1,13 @@
-import time 
+import time
+
 from pathlib import Path
-from rich.progress import Progress, TextColumn, BarColumn, DownloadColumn
+
+from rich.progress import Progress, TextColumn, BarColumn, DownloadColumn 
+from rich.console import Console
 
 import yt_dlp
+
+console = Console()
 
 progress = Progress(
     TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
@@ -28,6 +33,7 @@ def progress_hook(d):
 
     elif d['status'] == "finished":
         progress.update(task, completed=progress.tasks[0].total)
+        progress.stop()
 
 def download(url, quality):
     outdir = Path.home()/"Downloads"
@@ -45,11 +51,11 @@ def download(url, quality):
         'progress_hooks': [progress_hook],
         'outtmpl': f'{outdir}/%(title)s.%(ext)s'
     }
-
-    print("Iniciando Download...")
+    
+    console.print("[yellow]Iniciando Download...[/]")
     with progress:
         with yt_dlp.YoutubeDL(opts) as ydl:
             ydl.download([url])
-
-    print("Download Concluído!")
+    
+    console.print("[green]✓ Download Concluído![/]")
 
