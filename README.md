@@ -27,10 +27,11 @@ python src/main.py URL
 
 Você pode executar o arquivo com alguns argumentos junto.
 
-| ARG       | DESCRIÇÃO                               |
-|-----------|-----------------------------------------|
-| --quality | Define a qualidade do áudio (kbps)      |
-| --confirm | pula a etapa de confirmação do download |
+| ARG       | DESCRIÇÃO                                      |
+|-----------|------------------------------------------------|
+| --quality | Define a qualidade do áudio (kbps)             |
+| --confirm | Pula a etapa de confirmação do download        |
+| --no-info | Pula a etapa de exibir as informações do vídeo |
 
 Exemplo:
 ```bash
