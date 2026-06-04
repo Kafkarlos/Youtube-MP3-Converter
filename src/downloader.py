@@ -1,6 +1,6 @@
 import time 
 from pathlib import Path
-from rich.progress import Progress, TextColumn, BarColumn, TimeElapsedColumn, TimeRemainingColumn, MofNCompleteColumn, DownloadColumn
+from rich.progress import Progress, TextColumn, BarColumn, DownloadColumn
 
 import yt_dlp
 

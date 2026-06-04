@@ -17,16 +17,18 @@ def main():
         type=int
     )
     parser.add_argument('--confirm', action='store_true')
-    
+    parser.add_argument('--no-info', action='store_true')
+
     args = parser.parse_args()
-    
+
     url = inquirer.text(
         message="URL:",
     ).execute() if not args.url else args.url
 
-    info = get_info(url)
-    print(f"{info.get('channel')} - {info.get('title')}")
-    print(f"Duração: {get_duration(info.get('duration'))}")
+    if not args.no_info:
+        info = get_info(url)
+        print(f"{info.get('channel')} - {info.get('title')}")
+        print(f"Duração: {get_duration(info.get('duration'))}")
 
     if not args.confirm:
         confirm = input("Prosseguir com o Download? [S/n]:").lower()
