@@ -34,6 +34,7 @@ def progress_hook(d):
     elif d['status'] == "finished":
         progress.update(task, completed=progress.tasks[0].total)
         progress.stop()
+        console.print("[yellow]Convertendo mp3...[/]")
 
 def download(url, quality):
     outdir = Path.home()/"Downloads"
@@ -53,6 +54,7 @@ def download(url, quality):
     }
     
     console.print("[yellow]Iniciando Download...[/]")
+
     with progress:
         with yt_dlp.YoutubeDL(opts) as ydl:
             ydl.download([url])
